@@ -2,12 +2,7 @@
 <?php 
     require_once('../config/config.php');
     
-    if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["nome"]) && isset($_GET["valor"])) {
-        $nome = filter_input(INPUT_GET, "nome", FILTER_SANITIZE_SPECIAL_CHARS);
-        $valor = str_replace(",", ".", filter_input(INPUT_GET, "valor", FILTER_SANITIZE_SPECIAL_CHARS));
-
-        $result = mysqli_query($conexao, "INSERT INTO produtos (nome, valor) VALUES ('$nome', '$valor')");
-    }
+    
     
     
 ?>
@@ -37,25 +32,27 @@
                 <img src="../img/produtos.jpg" alt="produto" class="img-produto">
             </div>
         <div class="col-8">
-            <form method="GET" action="cadastroprodutos.php">
+            <form method="GET" action="../models/salvarProduto.php">
                 <div class="mt-3 form-floating">
-                    <input type="number" class="form-control" id="codigo" name="codigo" readonly>
+                    <input type="number" class="form-control" id="codigo" name="codigo" readonly value="<?php echo isset($_GET["codigo"]) ? $_GET["codigo"] : ''; ?>">
                     <label for="codigo" class="form-label">Código</label>
                 </div>
         <div class="mt-3 form-floating">
-            <input type="text" class="form-control" id="nome" name="nome" required>
+            <input type="text" class="form-control" id="nome" name="nome" required value="<?php echo isset($_GET["nome"]) ? $_GET["nome"] : ''; ?>">
             <label for="nome" class="form-label">Nome do produto</label>
         </div>
         <div class="mt-3 form-floating">
-            <input type="text" class="form-control" id="valor" name="valor" required>
+            <input type="text" class="form-control" id="valor" name="valor" required value="<?php echo isset($_GET["valor"]) ? $_GET["valor"] : ''; ?>">
             <label for="valor" class="form-label">Valor</label>
         </div>
         <div class="mt-3 form-floating">
             <div class="row">
                 <div class="col">
-                    <button type="button" class="btn btn-primary form-control">
-                    Novo
-                    </button>
+                    <a href="cadastroProdutos.php">
+                        <button type="button" class="btn btn-primary form-control">
+                        Novo
+                        </button>
+                    </a>
                 </div>
                 <div class="col">
                     <button type="submit" class="btn btn-primary form-control">
@@ -97,7 +94,11 @@
                                  <td>".$linha['prod_id']."</td>
                                  <td>".$linha['nome']."</td>
                                 <td>".$linha['valor']."</td>
-                                <td></td>
+                                <td>
+                                <a href ='?
+                                codigo=".$linha['prod_id']."&
+                                nome=".$linha['nome']."&
+                                valor=".$linha['valor']."' class='btn btn-primary'>
                                 <td><a href ='../models/delete.php?codigo=".$linha['prod_id']."' class='btn btn-primary'>
                                 </td>
                                 </tr>"; 
